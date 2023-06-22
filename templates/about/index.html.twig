@@ -1,0 +1,26 @@
+{% extends 'base.html.twig' %}
+
+{% block title %} À propos  {% endblock %}
+
+{% block body %}
+    <div class="container my-5 pt-5">
+        <div class="row">
+            <div class="col-md-6">
+                <img src="{{ asset('img/nous.png') }}" class="img-fluid" alt="About Us Image" style="border-radius: 7%;">
+            </div>
+            <div class="col-md-6">
+                <h2 class="fonthead">Qui sommes-nous</h2>
+
+                <p class="font-f">Dans notre entreprise, nous nous engageons à offrir la meilleure expérience de cinéma en ligne possible à nos clients. Notre objectif est d'apporter l'expérience du cinéma chez vous, avec une large sélection de films et de vidéos YouTube disponibles en streaming.</p>
+                <p class="font-f">Nos services incluent :</p>
+                <ul class="font-f">
+                    <li>DVD vidéo et audio de haute qualité à portée de main</li>
+                    <li>Diffusion illimitée de films et de vidéos YouTube</li>
+                    <li>Ajouter des liens de bande-annonce "TEASER" pour regarder le contenu des films</li>
+                    <li>Expérience de visionnage sans publicité</li>
+                    <li>Diffusion vidéo et audio de haute qualité</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+{% endblock %}

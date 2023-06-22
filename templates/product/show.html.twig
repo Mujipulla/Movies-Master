@@ -1,0 +1,86 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ product.name }}{% endblock %}
+
+{% block body %}
+    <div class="container pt-5" style="margin-top: 20px">
+        <p style="font-family:'Cursive';"><a href="{{ path('products') }}" class="btn" id="btnhub"  style="background-color: rgb(10,162 ,192); color: white;"><i class="fa fa-arrow-left"></i> <b>Retour à la boutique</b></a></p>
+        <h2 class="mb-5 pt-3"  style="color: rgb(46, 166, 170); font-family:'Cursive'">{{ product.name }}</h2>
+
+        {#On affiche les détails du produit#}
+        <div class="row ">
+            <div class="col-md-5">
+                <img src="{{ asset('uploads/' ~ product.illustration) }}" alt="{{ product.name }}" class="img-fluid">
+            </div>
+            <div class="col-md-4">
+                <h3  style="font-family:'Cursive'">{{ product.name }}</h3>
+               {# Évaluation : {{ product.rating }}#}
+                <p class="text-secondary">{{ product.subtitle }}</p>
+                <p class="mt-5" style="font-family:'Cursive'">{{ product.description | striptags }}</p>
+            </div>
+
+            <div class="col-md-3" style="border-left: 1px solid #dddddd;">
+               
+                {% if product.isStock >= 50 %}
+                    <h4 class="text-muted mt-5">
+                        <b>Total: {{ (product.price / 100)|number_format(2, ',', ',') }} € </b>
+                    </h4>
+                      <p>Profitez de votre prix attractif</p>
+                    <p class="text-success"> {{ product.isStock }} en stock</p>
+                    {%  else %}
+                    <p class="text-danger {% if product.isStock < 50 %}mt-5{% endif %}">En rupture de stock</p>
+                {% endif %}
+                <div class="w3-border-bottom"></div>
+                <div class="row w3-center">
+                    {% if product.isStock >= 50 %}
+                        <a href="{{ path('add_to_cart', {'id': product.id}) }}" class="btn btn-block btn-primary mt-5 mb-5 w-100" style="background-color: rgb(10,162 ,192); color: white;"><i class="fas fa-cart-plus"></i> Ajouter au panier</a>
+                        <div class="col-md-6">
+                           {# <a href="#" onclick="addToFavorites({{ product.id }}); return false;">Ajouter aux favoris</a> #}
+                        </div>
+                        <div class="col-md-6">
+                           {# <a href="{{ path('cart_favorite', { 'id': product.id }) }}">Mettre à coté</a> #}
+                        </div>
+                    {% else %}
+                        <div class="col-md-12">
+                            <a href="{{ path('add_to_cart', {'id': product.id}) }}" class="btn btn-block btn-primary mt-5 mb-5 w-100 disabled ml-2 fa-beat " >
+                               <i class="fas fa-cart-plus"></i> Ajouter au panier
+                            </a>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+           <ul>
+                {% for product in product %}
+                    <li>{{ product.name }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+    
+{% endblock %}
+
+{% block javascripts %}
+    <script>
+        const image = document.querySelector('#myimage');
+
+        let zoom = 1;
+        let zoomStep = 0.1;
+        let zoomLimit = 3;
+
+        image.addEventListener('mouseover', () => {
+              zoom += zoomStep;
+              if (zoom > zoomLimit) {
+                zoom = zoomLimit;
+              }
+              image.style.transform = `scale(${zoom})`;
+        });
+
+        image.addEventListener('mouseout', () => {
+              zoom -= zoomStep;
+              if (zoom < 1) {
+                zoom = 1;
+              }
+              image.style.transform = `scale(${zoom})`;
+        });
+    </script>
+{% endblock %}

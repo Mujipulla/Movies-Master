@@ -1,0 +1,84 @@
+<?php
+
+namespace App\Controller;
+
+use App\Classe\Cart;
+use App\Entity\Order;
+use App\Entity\Product;
+use Doctrine\ORM\EntityManagerInterface;
+use Stripe\Checkout\Session;
+use Stripe\Stripe;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\Routing\Annotation\Route;
+
+class StripeController extends AbstractController
+{
+    #[Route('/commande/create-session/{ref}', name: 'stripe_create_session')]
+    public function index(EntityManagerInterface $em, Cart $cart, $ref): JsonResponse
+    {
+        $YOUR_DOMAIN = 'http://127.0.0.1:8000';
+        $productsForStripe = [];
+
+        $order = $em->getRepository(Order::class)->findOneByRef(['ref' => $ref]);
+       /* if (!$order instanceof Order) {
+            throw new \RuntimeException('Order not found');
+        }*/
+        if (!$order) {
+            new JsonResponse(['error' => 'order']);
+        }
+
+        foreach ($order->getOrderDetails()->getValues() as $product) {
+            $product_object = $em->getRepository(Product::class)->findOneByName(['name' => $product->getProduct()]);
+            //$product = $detail->getProduct();
+            $productsForStripe[] = [
+                'price_data' => [
+                    'currency' => 'eur',
+                    'unit_amount' => $product->getPrice(),
+                    'product_data' => [
+                        'name' => $product->getProduct(),
+                        'images' => [$YOUR_DOMAIN . "/uploads/" . $product_object->getIllustration()],
+                    ],
+                ],
+                'quantity' => $product->getQuantity(),
+                // On ajoute le prix du transporteur
+            ];
+        }
+
+        $productsForStripe[] = [
+            'price_data' => [
+                'currency' => 'eur',
+                'unit_amount' => $order->getCarrierPrice(),
+                'product_data' => [
+                    'name' => $order->getCarrierName(),
+                    'images' => [$YOUR_DOMAIN],
+                ],
+            ],
+            'quantity' => 1,
+            // On ajoute le prix du transporteur
+        ];
+
+        Stripe::setApiKey('sk_test_51MrgS3HfjK9xd7JbYCjUOwZbfIWGohBeNT895Nv6f5MR6tqlNepPDtJiLkqpqHwq2u6fPyaKb7gQOrw4Hvq0aY2h00RVZEC8my');
+
+        $checkoutSession = Session::create([
+            'customer_email' => $this->getUser()->getEmail(),
+            'payment_method_types' => ['card'],
+            'line_items' => $productsForStripe,
+            'mode' => 'payment',
+            //'success_url' => $YOUR_DOMAIN . '/success.html',
+            'success_url' => $YOUR_DOMAIN . '/commande/success/{CHECKOUT_SESSION_ID}',
+            //'cancel_url' => $YOUR_DOMAIN . '/cancel.html',
+            'cancel_url' => $YOUR_DOMAIN . '/commande/failed/{CHECKOUT_SESSION_ID}',
+            /*'automatic_tax' => [
+                'enabled' => true,
+            ],*/
+        ]);
+
+        $order->setStripeSessionId($checkoutSession->id); // On enregistre l'id de la session Stripe dans notre commande
+
+        $em->flush(); // On enregistre en base de données
+
+        return new JsonResponse(['id' => $checkoutSession->id], 200, []); // On retourne l'id de la session Stripe au format JSON
+
+    }
+}

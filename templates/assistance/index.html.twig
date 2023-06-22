@@ -1,0 +1,49 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Assistance{% endblock %}
+
+{% block body %}
+<div class="container py-4">
+
+    {%  for success in app.flashes('success') %}
+        <div class="alert alert-success">
+            <p class="">{{ success }}</p>
+        </div>
+    {% endfor %}
+    <h2 class="mb-5 text-center fonthead" >Contactez-nous</h2>
+  <!-- Bootstrap 5 starter form -->
+  <form action="{{path('app_assistance')}}" type="post" id="contactForm">
+
+    <!-- Name input -->
+        <div class="mb-3">
+            <label class="form-label colorthird font-f" for="name">Nom</label>
+            <input class="form-control font-f" name="nom" id="name" type="text" placeholder="Nom" />
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label colorthird font-f" for="name">Prénom</label>
+            <input class="form-control font-f" id="name" name="fname" type="text" placeholder="prénom" />
+        </div>
+
+        <!-- Email address input -->
+        <div class="mb-3">
+            <label class="form-label colorthird font-f" for="emailAddress">Email</label>
+            <input class="form-control font-f" id="emailAddress" name="email" type="email" placeholder="Adresse email " />
+        </div>
+
+        <!-- Message input -->
+        <div class="mb-3">
+            <label class="form-label colorthird font-f" for="message">Message</label>
+            <textarea class="form-control font-f" id="message" name="message" type="text" placeholder="Message....." style="height: 10rem;"></textarea>
+        </div>
+
+        <!-- Form submit button -->
+        <div class="d-grid">
+            <button type="submit" class="btn  btn-lg font-f" type="submit" style="background-color: rgb(46, 166, 170); color: white;">Envoyer</button>
+        </div>
+
+  </form>
+
+</div>
+  
+{% endblock %}

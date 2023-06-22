@@ -1,0 +1,20 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Mon compte : Boutique poles{% endblock %}
+
+{% block body %}
+    <div class="container pt-5" style="margin-top: 20px">
+        <h2 class="sheading">Mon compte</h2>
+
+        <p style="font-family:'Cursive'; ">
+            Bienvenu <span class="w3-text-blue">{{ app.user.firstname }} {{ app.user.lastname }}</span> dans votre espace membre.<br>
+            Vous pouvez modifier vos informations personnelles en cliquant sur le bouton ci-dessous.
+            <a  class="w3-text-blue" href="{{ path('app_logout') }}" >Déconnexion</a>
+        </p>
+        <hr class="w3-red">
+            - <a href="{{ path('account_password') }}" style="font-family:'Cursive'; ">Modifier mon mot de passe</a><br>
+            - <a href="{{ path('account_address') }}" style="font-family:'Cursive'; ">Gérer mes adresses</a><br>
+            <p class="font-footer-h pt-3">Mes commandes</p>  
+            <p style="font-family:'Cursive'; "> Modifier mes informations personnelles</p>
+        </hr>
+{% endblock %}

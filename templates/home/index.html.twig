@@ -1,0 +1,86 @@
+{% extends 'base.html.twig' %}
+
+{% block title %} Boutique Poles {% endblock %}
+
+{% block carousel %}{% endblock %}
+
+{% block body %}
+
+    
+   
+    <div class="container">
+
+        <h1 class="text-center fonthead">Bienvenue aux Movies Store</h1>   
+
+        <div id="carouselExampleDark" class="carousel carousel-dark slide" data-bs-ride="carousel">
+            <div class="carousel-indicators">
+                <button type="button" data-bs-target="#carouselExampleDark" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+                <button type="button" data-bs-target="#carouselExampleDark" data-bs-slide-to="1" aria-label="Slide 2"></button>
+                <button type="button" data-bs-target="#carouselExampleDark" data-bs-slide-to="2" aria-label="Slide 3"></button>
+            </div>
+            <div class="carousel-inner">
+                    <div class="carousel-item active" data-bs-interval="1000">
+                    <img src="https://th.bing.com/th/id/R.dfff37ce34722c9361c6609fdae50097?rik=Y3R6FNKPM5QLIA&pid=ImgRaw&r=0" class="d-block w-100" alt="...">
+                    <div class="carousel-caption d-none d-md-block">
+                        <h5 style="color: white;">Film d'action</h5>
+                        <p style="color: gray;">Some representative placeholder content for the first slide.</p>
+                    </div>
+                </div>
+                <div class="carousel-item" data-bs-interval="2000">
+                    <img src="https://www.wallpaperflare.com/static/332/676/867/belle-beast-beauty-and-the-beast-2017-wallpaper.jpg" class="d-block w-100" alt="...">
+                    <div class="carousel-caption d-none d-md-block">
+                        <h5 style="color: white;">Films romantiques</h5>
+                        <p style="color: gray;">Some representative placeholder content for the second slide.</p>
+                    </div>
+                </div>
+                <div class="carousel-item">
+                    <img src="https://wallpapercave.com/wp/wp1945898.jpg" class="d-block w-100" alt="...">
+                    <div class="carousel-caption d-none d-md-block">
+                        <h5 style="color: white;">Collections de films</h5>
+                        <p style="color: white;">Some representative placeholder content for the third slide.</p>
+                    </div>
+                </div>
+            </div>
+                <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleDark" data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Previous</span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleDark" data-bs-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Next</span>
+                </button>
+        </div>
+        
+    </div>
+
+
+    <div class="container mt-5">
+        <div class="row">
+            <h2 class="text-center pt-3 fonthead">Catégories</h2>
+            {% for category in categories  %}
+                <div class="col-md-4">
+                    <h3 class="colorthird text-center font-f">{{  category.name }} </h3>
+                    <img class="img-fluid" src="{{ asset('uploads/' ~ category.illustration) }}" alt="{{  category.name }}" style="border-radius: 5%;">
+                    <p style="text-align: center;">{{  category.description | raw}}</p>
+                    {# <p><a class="btn btn-secondary" href="{{ path('products') }}" role="button" >View details »</a></p> #}
+                </div>
+            {% endfor  %}   
+        </div>
+
+        <hr>
+
+        <div class="row">
+            <h2 class="text-center fonthead">Films</h2>
+            {% for products in products  %}
+                <div class="col-md-4 border border-1 box-shadow">
+                    <a href="{{ path('product', {slug: products.slug}) }}" class="btn btn-sm w3-hover">
+                        <img class="img-fluid" src="{{ asset('uploads/' ~ products.illustration) }}" alt="" style="border-radius: 3%;">
+                    </a>
+                    <h3  class="colorthird font-f">{{  products.name }}</h3>
+                    <p class="text-secondary">{{  products.subtitle | raw }}</p>
+                </div>
+            {% endfor  %}   
+        </div>
+    </div>
+                        
+{% endblock %}
